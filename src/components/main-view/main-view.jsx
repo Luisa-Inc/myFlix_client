@@ -9,18 +9,18 @@ export const MainView = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
-    fetch("https://mighty-harbor-05233.herokuapp.com/")
+    fetch("https://mighty-harbor-05233.herokuapp.com/movies")
       .then((response) => response.json())
       .then((data) => {
-        const moviesFromApi = data.docs.map((doc) => {
+        const moviesFromApi = data.map((doc) => {
           return {
-            id: doc.key,
-            title: doc.title,
-            image: `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg`,
-            director: doc.director_name?.[0],
-            genre: doc.genre,
-            description: doc.description,
-          };
+              id: doc._id,
+              title: doc.Title,
+              image: doc.ImagePath,
+              director: doc.Director,
+              genre: doc.Genre,
+              description: doc.Description,
+              }
         });
 
         setMovies(moviesFromApi);
