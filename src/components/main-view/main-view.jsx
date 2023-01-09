@@ -24,22 +24,23 @@ export const MainView = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
+        const moviesFromApi = data.map((doc) => {
+          return {
+            id: doc._id,
+            title: doc.Title,
+            image: doc.ImagePath,
+            director: doc.Director,
+            genre: doc.Genre,
+            description: doc.Description,
+          };
+        });
+      
+        setMovies(moviesFromApi);
+      
       });
   }, [token]);
 
-  const moviesFromApi = data.map((doc) => {
-    return {
-      id: doc._id,
-      title: doc.Title,
-      image: doc.ImagePath,
-      director: doc.Director,
-      genre: doc.Genre,
-      description: doc.Description,
-    };
-  });
 
-  setMovies(moviesFromApi);
-} ;
 
 if (!user) {
   return (
@@ -112,3 +113,4 @@ if (!user) {
       ))}
     </div>
   );
+};
