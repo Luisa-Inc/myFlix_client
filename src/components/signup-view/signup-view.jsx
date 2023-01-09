@@ -30,7 +30,7 @@ export const SignupView = () => {
         alert("Signup failed");
       }
     });
-  };};
+  }}
 
   return (
     <form onSubmit={handleSubmit}>
