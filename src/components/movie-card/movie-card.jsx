@@ -2,7 +2,7 @@
 import PropTypes from "prop-types";
 import { Button, Card } from "react-bootstrap";
 
-import ".movie-card.scss";
+import "./movie-card.scss";
 
 // The MovieCard function component 
 export const MovieCard = ({ movie, onMovieClick }) => {
