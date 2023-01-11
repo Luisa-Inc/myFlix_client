@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, Form, Container, Card, Row, Col } from "react-bootstrap/Button";
+import { Button, Card } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
 
 import "./login-view.scss";
 
@@ -40,10 +41,9 @@ export const LoginView = ({ onLoggedIn }) => {
   };
 
   return (
-    <Container>
-      <Row>
-        <Col></Col>
-        <Col>
+    
+    
+      
           <Card>
             <Card.Body>
               <Form onSubmit={handleSubmit}>
@@ -73,9 +73,8 @@ export const LoginView = ({ onLoggedIn }) => {
               </Form>
             </Card.Body>
           </Card>
-        </Col>
-        <Col></Col>
-      </Row>
-    </Container>
+      
+    
+    
   );
 };
