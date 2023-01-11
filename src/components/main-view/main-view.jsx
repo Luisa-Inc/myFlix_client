@@ -7,7 +7,7 @@ import { SignupView } from "../signup-view/signup-view";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-import ".main-view.scss";
+import "./main-view.scss";
 
 export const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
