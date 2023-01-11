@@ -1,4 +1,4 @@
-import ".movie-view.scss";
+import "./movie-view.scss";
 
 export const MovieView = ({ movie, onBackClick }) => {
   return (
