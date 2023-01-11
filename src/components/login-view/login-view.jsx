@@ -13,8 +13,8 @@ export const LoginView = ({ onLoggedIn }) => {
     event.preventDefault();
 
     const data = {
-      access: username,
-      secret: password,
+      Username: username,
+      Password: password,
     };
 
     fetch("https://mighty-harbor-05233.herokuapp.com/login", {
