@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { useState, useEffect } from "react";
 import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
@@ -6,6 +6,8 @@ import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+
+import ".main-view.scss";
 
 export const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -21,7 +23,7 @@ export const MainView = () => {
     }
 
     fetch("https://mighty-harbor-05233.herokuapp.com/movies", {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => response.json())
       .then((data) => {
@@ -36,27 +38,29 @@ export const MainView = () => {
             description: doc.Description,
           };
         });
-      
+
         setMovies(moviesFromApi);
-      
       });
   }, [token]);
 
+  if (!user) {
+    return (
+      <Row className="justify-content-md-center">
+        <Col md={5}>
+          <LoginView
+            onLoggedIn={(user, token) => {
+              setUser(user);
+              setToken(token);
+            }}
+          />
+          or
+          <SignupView />
+        </Col>
+      </Row>
+    );
+  }
 
 
-if (!user) {
-  return (
-    
-      <Col md={5}>
-        <LoginView onLoggedIn={(user, token) => {
-          setUser(user);
-          setToken(token);
-        }} />
-        or
-        <SignupView />
-      </Col>
-  );
-}
   if (selectedMovie) {
     return (
       <>
@@ -64,19 +68,20 @@ if (!user) {
           onClick={() => {
             setUser(null);
             setUser(null);
-            setToken(null)
+            setToken(null);
           }}
         >
           Logout
         </button>
-        <Col md={8}>
-          <MovieView
-            style={{ border: "1px solid green" }}
-            movie={selectedMovie}
-            onBackClick={() => setSelectedMovie(null)}
-          />
-        </Col>
-        
+        <Row className="justify-content-md-center">
+          <Col md={8}>
+            <MovieView
+              style={{ border: "1px solid green" }}
+              movie={selectedMovie}
+              onBackClick={() => setSelectedMovie(null)}
+            />
+          </Col>
+        </Row>
       </>
     );
   }
@@ -88,7 +93,7 @@ if (!user) {
           onClick={() => {
             setUser(null);
             setToken(null);
-            localStorage.clear()
+            localStorage.clear();
           }}
         >
           Logout
@@ -104,22 +109,23 @@ if (!user) {
         onClick={() => {
           setUser(null);
           setToken(null);
-          localStorage.clear()
+          localStorage.clear();
         }}
       >
         Logout
       </button>
       {movies.map((movie) => (
-        <Col className="mb-4" key={book.id} md={3}>
-          <MovieCard
-            key={movie.id}
-            movie={movie}
-            onMovieClick={(newSelectedMovie) => {
-            setSelectedMovie(newSelectedMovie);
-          }}
-        />
-        </Col>
-        
+        <Row className="justify-content-md-center">
+          <Col className="mb-4" key={movie.id} md={3}>
+            <MovieCard
+              key={movie.id}
+              movie={movie}
+              onMovieClick={(newSelectedMovie) => {
+                setSelectedMovie(newSelectedMovie);
+              }}
+            />
+          </Col>
+        </Row>
       ))}
     </div>
   );
