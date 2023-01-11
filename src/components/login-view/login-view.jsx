@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Form, Container, Card, Row, Col } from "react-bootstrap/Button";
 
-import ".login-view.scss";
+import "./login-view.scss";
 
 export const LoginView = ({ onLoggedIn }) => {
   const [username, setUsername] = useState("");
