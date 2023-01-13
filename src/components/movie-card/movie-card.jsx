@@ -7,16 +7,17 @@ import "./movie-card.scss";
 
 // The MovieCard function component
 export const MovieCard = ({ movie }) => {
+  
   return (
-    <Card>
-      <Card.Img variant="top" src={movie.image} />
+    <Card className="h-100">
+      <Card.Img crossOrigin="anonymous" variant="top" src={movie.ImagePath} />
       <Card.Body>
         <Card.Title>{movie.title}</Card.Title>
+        <Card.Text>{movie.description}</Card.Text>
         <Card.Text>{movie.director.Name}</Card.Text>
         <Card.Text>{movie.genre.Name}</Card.Text>
-        <Card.Text>{movie.description}</Card.Text>
-        <Link to={`/movies/${encodeURIComponent(movie.id)}`}>
-          <Button variant="link">Open</Button>
+        <Link to={`/movies/${encodeURIComponent(movie._id)}`}>
+          <Button className="button-primary">Open</Button>
         </Link>
       </Card.Body>
     </Card>

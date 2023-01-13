@@ -4,6 +4,8 @@ import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
+import { ProfileView } from "../profile-view/profile-view";
+import { NavigationBar } from "../navigation-bar/navigation-bar";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -13,6 +15,7 @@ import "./main-view.scss";
 export const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const storedToken = localStorage.getItem("token");
+
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
   const [movies, setMovies] = useState([]);
@@ -45,6 +48,14 @@ export const MainView = () => {
 
   return (
     <BrowserRouter>
+      <NavigationBar
+        user={user}
+        onLoggedOut={() => {
+          setUser(null);
+          setToken(null);
+          localStorage.clear();
+        }}
+      />
       <Row className="justify-content-md-center">
         <Routes>
           <Route
@@ -76,7 +87,7 @@ export const MainView = () => {
             }
           />
           <Route
-            path="/movies/:moviesId"
+            path="/movies/:movieId"
             element={
               <>
                 {!user ? (
@@ -91,6 +102,7 @@ export const MainView = () => {
               </>
             }
           />
+
           <Route
             path="/"
             element={
@@ -103,10 +115,27 @@ export const MainView = () => {
                   <>
                     {movies.map((movie) => (
                       <Col className="mb-4" key={movie.id} md={3}>
-                        <MovieCard movie={movie} />
+                        <MovieCard movies={movie} />
                       </Col>
                     ))}
                   </>
+                )}
+              </>
+            }
+          />
+
+          <Route
+            path="/users/:Username"
+            element={
+              <>
+                {!user ? (
+                  <Navigate to="/login" replace />
+                ) : movies.length === 0 ? (
+                  <Col>No such user found</Col>
+                ) : (
+                  <Col md={8}>
+                    <ProfileView user={user} movies={movies} />
+                  </Col>
                 )}
               </>
             }
@@ -116,3 +145,4 @@ export const MainView = () => {
     </BrowserRouter>
   );
 };
+
