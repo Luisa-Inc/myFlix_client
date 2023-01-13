@@ -11,8 +11,8 @@ export const MovieCard = ({ movie, onMovieClick }) => {
       <Card.Img variant="top" src={movie.image} />
       <Card.Body>
         <Card.Title>{movie.title}</Card.Title>
-        <Card.Text>{movie.director}</Card.Text>
-        <Card.Text>{movie.genre}</Card.Text>
+        <Card.Text>{movie.director.Name}</Card.Text>
+        <Card.Text>{movie.genre.Name}</Card.Text>
         <Card.Text>{movie.description}</Card.Text>
         <Button onClick={() => onMovieClick(movie)} variant="link">
           Open
