@@ -1,123 +1,81 @@
-import React, { useState } from "react";
-import { Button, Row, Col } from "react-bootstrap";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
-
+import { Button, Card, Row, Container } from "react-bootstrap";
 import "./movie-view.scss";
 
 export const MovieView = ({ movies }) => {
   const { movieId } = useParams();
-
-  const movie = movies.find((m) => m._id === movieId);
-
-  const storedToken = localStorage.getItem("token");
+  const movie = movies.find((m) => m.id === movieId);
   const storedUser = JSON.parse(localStorage.getItem("user"));
-  const [token, setToken] = useState(storedToken ? storedToken : null);
-  const [user, setUser] = useState(storedUser ? storedUser : null);
+  const token = localStorage.getItem("token");
 
-  const handleFavorite = () => {
-    fetch(
-      "https://mighty-harbor-05233.herokuapp.com/users/" +
-        user.Username +
-        "/movies/" +
-        movie._id,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((response) => {
-        alert("Added to favorites!");
-        return response.json();
+  const addFavorite = (movieId) => {
+    if (!token) return;
+
+    const url = `https://mighty-harbor-05233.herokuapp.com/users/${storedUser.Username}/movies/${movieId}`;
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    fetch(url, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
       })
-      .then((data) => updateUser(data))
-      .catch((err) => {
-        alert("Something went wrong");
+      .catch((e) => {
+        alert("Something went wrong!");
       });
   };
 
-  const handleRemoveFavorite = () => {
-    fetch(
-      "https://mighty-harbor-05233.herokuapp.com/users/" +
-        user.Username +
-        "/movies/" +
-        movie._id,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    ).then((response) => {
-      if (response.ok) {
-        alert("Removed from favorites");
-        const newUser = {
-          ...user,
-          FavoriteMovies: user.FavoriteMovies.filter(
-            (movie) => movie._id != movie._id
-          ),
-        };
-        updateUser(newUser);
-      } else {
-        alert("Something went wrong");
-      }
-    });
-  };
-
-  const updateUser = (user) => {
-    localStorage.setItem("user", JSON.stringify(user));
-    setUser(user);
-  };
-
   return (
-    <Row className="movie-view">
-      <Col md={6} className="movie-poster">
-        <img
-          className="movie-img"
-          crossOrigin="anonymous"
-          src={movie.ImagePath}
-        />
-      </Col>
-      <Col md={6}>
-        <div className="movie-title">
-          <span className="value">{movie.title}</span>
-        </div>
-        <div className="movie-description">
-          <span className="label">Description: </span>
-          <span className="value">{movie.description}</span>
-        </div>
-        <div className="movie-director">
-          <span className="label">Director: </span>
-          <span className="value">{movie.director.Name}</span>
-        </div>
-        <div className="movie-genre">
-          <span className="label">Genre: </span>
-          <span className="value">{movie.genre.Name}</span>
-        </div>
-        <Link to={`/`}>
-          <Button className="back-button button-primary">Back</Button>
-        </Link>
-
-        {storedUser.FavoriteMovies.indexOf(movie._id) >= 0 ? (
-          <Button
-            variant="danger"
-            onClick={() => handleRemoveFavorite(movie._id, "add")}
-          >
-            Remove from Favorites
-          </Button>
-        ) : (
-          <Button
-            className="button-add-favorite"
-            onClick={() => handleFavorite(movie._id, "add")}
-          >
-            + Add to Favorites
-          </Button>
-        )}
-      </Col>
-    </Row>
+    <Container className="cardset; content">
+      <Row>
+        <Card bg="dark" text="light">
+          <Card.Header>
+            <div className="title text-center">
+              <span> {movie.title} </span>
+            </div>
+            <Button
+              className="fav-btn"
+              size="sm"
+              variant="secondary"
+              onClick={addFavorite(movie.id)}
+            >
+              Add to Favorites
+            </Button>
+          </Card.Header>
+          <Card.Body>
+            <div>
+              <div>
+                <Card.Img
+                  className="cardimage"
+                  crossOrigin="anonymous"
+                  src={movie.image}
+                />
+              </div>
+              <div>
+                <span className="labeltitle">Description: </span>
+                <span className="description">{movie.description}</span>
+              </div>
+              <div>
+                <span className="labeltitle">Genre: </span>
+                <span className="genre">{movie.genre.Name}</span>
+              </div>
+              <div>
+                <span className="labeltitle">Director: </span>
+                <span className="director">{movie.director.Name}</span>
+              </div>
+            </div>
+          </Card.Body>
+          <Card.Footer>
+            <Link to="/">
+              <Button className="btn-login"> Back </Button>
+            </Link>
+          </Card.Footer>
+        </Card>
+      </Row>
+    </Container>
   );
 };

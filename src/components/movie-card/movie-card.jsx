@@ -1,26 +1,32 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Button, Card } from "react-bootstrap";
+import { Button, Card, Container, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import "./movie-card.scss";
 
 // The MovieCard function component
 export const MovieCard = ({ movie }) => {
-  
   return (
-    <Card className="h-100">
-      <Card.Img crossOrigin="anonymous" variant="top" src={movie.ImagePath} />
-      <Card.Body>
-        <Card.Title>{movie.title}</Card.Title>
-        <Card.Text>{movie.description}</Card.Text>
-        <Card.Text>{movie.director.Name}</Card.Text>
-        <Card.Text>{movie.genre.Name}</Card.Text>
-        <Link to={`/movies/${encodeURIComponent(movie._id)}`}>
-          <Button className="button-primary">Open</Button>
-        </Link>
-      </Card.Body>
-    </Card>
+    <Container className="content">
+      <Col>
+        <Card className="h-100; moviecardview" bg="dark" text="light">
+          <Card.Img variant="top" crossOrigin="anonymous" src={movie.image} />
+          <Card.Body>
+            <Card.Title className="title"> {movie.title} </Card.Title>
+            <Card.Text className="description">
+              {" "}
+              Directed by {movie.director.Name}{" "}
+            </Card.Text>
+          </Card.Body>
+          <Card.Footer>
+            <Link to={`/movies/${encodeURIComponent(movie.id)}`}>
+              <Button className="btn-login">Open</Button>
+            </Link>
+          </Card.Footer>
+        </Card>
+      </Col>
+    </Container>
   );
 };
 
@@ -39,5 +45,5 @@ MovieCard.propTypes = {
       description: PropTypes.string,
     }),
     description: PropTypes.string.isRequired,
-  }).isRequired
+  }).isRequired,
 };

@@ -98,7 +98,7 @@ export const ProfileView = ({ movies }) => {
       </Col>
       <Col>
         <Form onSubmit={handleSubmit}>
-          <h2>Update info</h2>
+          <h2>Update your personal information</h2>
           <Form.Group>
             <Form.Label>Username: </Form.Label>
             <Form.Control

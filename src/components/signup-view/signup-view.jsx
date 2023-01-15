@@ -17,7 +17,7 @@ export const SignupView = () => {
       Username: username,
       Password: password,
       Email: email,
-      Birthday: birthday
+      Birthday: birthday,
     };
 
     fetch("https://mighty-harbor-05233.herokuapp.com/users", {

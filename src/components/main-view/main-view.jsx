@@ -65,7 +65,7 @@ export const MainView = () => {
                 {user ? (
                   <Navigate to="/" />
                 ) : (
-                  <Col md={5}>
+                  <Col md={5} xs={12}>
                     <SignupView />
                   </Col>
                 )}
@@ -79,8 +79,13 @@ export const MainView = () => {
                 {user ? (
                   <Navigate to="/" />
                 ) : (
-                  <Col md={5}>
-                    <LoginView onLoggedIn={(user) => setUser(user)} />
+                  <Col md={5} xs={12}>
+                    <LoginView
+                      onLoggedIn={(user, token) => {
+                        setUser(user);
+                        setToken(token);
+                      }}
+                    />
                   </Col>
                 )}
               </>
@@ -92,17 +97,16 @@ export const MainView = () => {
               <>
                 {!user ? (
                   <Navigate to="/login" replace />
-                ) : movies.length === 0 ? (
-                  <Col>The list is empty!</Col>
+                ) : movies.lenght === 0 ? (
+                  <Col> The list is empty!</Col>
                 ) : (
-                  <Col md={8}>
+                  <Col md={8} xs={12}>
                     <MovieView movies={movies} />
                   </Col>
                 )}
               </>
             }
           />
-
           <Route
             path="/"
             element={
@@ -115,7 +119,7 @@ export const MainView = () => {
                   <>
                     {movies.map((movie) => (
                       <Col className="mb-4" key={movie.id} md={3}>
-                        <MovieCard movies={movie} />
+                        <MovieCard movie={movie} />
                       </Col>
                     ))}
                   </>
@@ -123,18 +127,15 @@ export const MainView = () => {
               </>
             }
           />
-
           <Route
-            path="/users/:Username"
+            path="/user"
             element={
               <>
                 {!user ? (
                   <Navigate to="/login" replace />
-                ) : movies.length === 0 ? (
-                  <Col>No such user found</Col>
                 ) : (
                   <Col md={8}>
-                    <ProfileView user={user} movies={movies} />
+                    <ProfileView movies={movies} />
                   </Col>
                 )}
               </>
@@ -145,4 +146,3 @@ export const MainView = () => {
     </BrowserRouter>
   );
 };
-
