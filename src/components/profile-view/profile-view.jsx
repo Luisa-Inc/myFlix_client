@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form, Row, Col } from "react-bootstrap";
+import { Button, Form, Row, Col, Container } from "react-bootstrap";
 import { MovieCard } from "../movie-card/movie-card";
 
 import "./profile-view.scss";
@@ -18,7 +18,7 @@ export const ProfileView = ({ movies }) => {
   let favoriteMovies =
     movies &&
     movies.filter(
-      (m) => user.FavoriteMovies && user.FavoriteMovies.indexOf(m._id) >= 0
+      (m) => user.FavoriteMovies && user.FavoriteMovies.indexOf(m.id) >= 0
     );
 
   const updateUser = (username) => {
@@ -79,71 +79,73 @@ export const ProfileView = ({ movies }) => {
   };
 
   return (
-    <Row>
-      <Col>
-        <div className="profile-info">
-          <div className="user-info">
-            <span className="label">Username: </span>
-            <span className="value">{user.Username}</span>
-          </div>
-          <div className="user-info">
-            <span className="label">Email: </span>
-            <span className="value">{user.Email}</span>
-          </div>
-          <div className="user-info">
-            <span className="label">Birthday: </span>
-            <span className="value">{user.Birthday}</span>
-          </div>
-        </div>
-      </Col>
-      <Col>
-        <Form onSubmit={handleSubmit}>
-          <h2>Update your personal information</h2>
-          <Form.Group>
-            <Form.Label>Username: </Form.Label>
-            <Form.Control
-              type="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Password: </Form.Label>
-            <Form.Control
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Email: </Form.Label>
-            <Form.Control
-              type="text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </Form.Group>
-          <Button type="submit" className="button-primary">
-            Save Changes
-          </Button>
-        </Form>
-        <Button
-          onClick={() => handleDeregister(user._id)}
-          className="button-delete"
-          type="submit"
-          variant="danger"
-        >
-          Delete Account
-        </Button>
-      </Col>
+    <Container className="content">
       <Row>
-        {favoriteMovies.length > 0 &&
-          favoriteMovies.map((movie) => (
-            <Col className="mb-5" key={movie.id} sm={5} md={3}>
-              <MovieCard movie={movie} />
-            </Col>
-          ))}
+        <Col>
+          <div className="profile-info">
+            <div className="user-info">
+              <span className="label">Username: </span>
+              <span className="value">{user.Username}</span>
+            </div>
+            <div className="user-info">
+              <span className="label">Email: </span>
+              <span className="value">{user.Email}</span>
+            </div>
+            <div className="user-info">
+              <span className="label">Birthday: </span>
+              <span className="value">{user.Birthday}</span>
+            </div>
+          </div>
+        </Col>
+        <Col>
+          <Form onSubmit={handleSubmit}>
+            <h2>Update your personal information</h2>
+            <Form.Group>
+              <Form.Label>Username: </Form.Label>
+              <Form.Control
+                type="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Password: </Form.Label>
+              <Form.Control
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Email: </Form.Label>
+              <Form.Control
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Form.Group>
+            <Button type="submit" className="button-primary">
+              Save Changes
+            </Button>
+          </Form>
+          <Button
+            onClick={() => handleDeregister(user._id)}
+            className="button-delete"
+            type="submit"
+            variant="danger"
+          >
+            Delete Account
+          </Button>
+        </Col>
+        <Row>
+          {favoriteMovies.length > 0 &&
+            favoriteMovies.map((movie) => (
+              <Col className="mb-5" key={movie.id} sm={5} md={3}>
+                <MovieCard movie={movie} />
+              </Col>
+            ))}
+        </Row>
       </Row>
-    </Row>
+    </Container>
   );
 };
