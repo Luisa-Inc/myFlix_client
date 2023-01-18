@@ -20,13 +20,13 @@ export const MovieView = ({ movies }) => {
       },
     };
     fetch(url, requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((e) => {
-        alert("Something went wrong!");
-      });
+      .then((response) => {
+      alert("Added to favorites!");
+      return response.json();
+    }).then(data => updateUser(data))
+    .catch(err => {
+        alert("Something went wrong");
+    });
   };
 
   return (
