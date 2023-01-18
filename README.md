@@ -17,7 +17,12 @@ Why — Movie enthusiasts should be able to access information about different m
 
 ## Built with
 
-React Redux React Bootstrap
+- React Redux 
+- React Bootstrap
+- Parcel
+- MERN (MongoDB, Express, React, and Node.js) stack.
+
+
 
 ## Features
 
