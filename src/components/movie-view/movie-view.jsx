@@ -20,12 +20,13 @@ export const MovieView = ({ movies }) => {
       },
     };
     fetch(url, requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
+      .then((response) => {
+        console.log(response);
+        alert("Added to favorites!");
+        return response.json();
       })
-      .catch((e) => {
-        alert("Something went wrong!");
+      .catch((err) => {
+        alert("Something went wrong");
       });
   };
 
@@ -41,7 +42,7 @@ export const MovieView = ({ movies }) => {
               className="fav-btn"
               size="sm"
               variant="secondary"
-              onClick={addFavorite(movie.id)}
+              onClick={() => addFavorite(movie.id)}
             >
               Add to Favorites
             </Button>
