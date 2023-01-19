@@ -9,8 +9,8 @@ import "./movie-card.scss";
 export const MovieCard = ({ movie }) => {
   return (
     <Container className="content">
-      <Col>
-        <Card className="h-100; moviecardview" bg="dark" text="light">
+      <Col class="col-sm d-flex">
+        <Card className="flex-fill, moviecardview" bg="dark" text="light">
           <Card.Img variant="top" crossOrigin="anonymous" src={movie.image} />
           <Card.Body>
             <Card.Title className="title"> {movie.title} </Card.Title>
