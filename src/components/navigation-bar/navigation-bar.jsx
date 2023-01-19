@@ -10,29 +10,20 @@ export const NavigationBar = ({ user, onLoggedOut }) => {
     <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
       <Container>
         <Navbar.Brand as={Link} to="/">
-          myFlixApp
+          luisaflix
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            {!user && (
-              <>
-                <Nav.Link as={Link} to="/login">
-                  Login
-                </Nav.Link>
-                <Nav.Link as={Link} to="/signup">
-                  Signup
-                </Nav.Link>
-              </>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="ml-auto">
+            {isAuth() && <Nav.Link href="/">Movies</Nav.Link>}
+            {isAuth() && <Nav.Link href={`/users/${user}`}>Profile</Nav.Link>}
+            {isAuth() && (
+              <Button variant="link" onClick={onLoggedOut}>
+                Logout
+              </Button>
             )}
-            {user && (
-              <>
-                <Nav.Link as={Link} to={`/user`}>
-                  {user.Username}
-                </Nav.Link>
-                <Nav.Link onClick={onLoggedOut}>Logout</Nav.Link>
-              </>
-            )}
+            {!isAuth() && <Nav.Link href="/">Login</Nav.Link>}
+            {!isAuth() && <Nav.Link href="/register">Signup</Nav.Link>}
           </Nav>
         </Navbar.Collapse>
       </Container>
