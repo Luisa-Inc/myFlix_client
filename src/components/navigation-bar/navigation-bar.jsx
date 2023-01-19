@@ -1,5 +1,7 @@
-import React from "react";
-import { Navbar, Nav, Button, Container } from "react-bootstrap";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import { Link } from "react-router-dom";
 
 import "./navigation-bar.scss";
 
@@ -10,18 +12,27 @@ export const NavigationBar = ({ user, onLoggedOut }) => {
         <Navbar.Brand as={Link} to="/">
           luisaflix
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="ml-auto">
-            {isAuth() && <Nav.Link href="/">Movies</Nav.Link>}
-            {isAuth() && <Nav.Link href={`/users/${user}`}>Profile</Nav.Link>}
-            {isAuth() && (
-              <Button variant="link" onClick={onLoggedOut}>
-                Logout
-              </Button>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            {!user && (
+              <>
+                <Nav.Link as={Link} to="/login">
+                  Login
+                </Nav.Link>
+                <Nav.Link as={Link} to="/signup">
+                  Signup
+                </Nav.Link>
+              </>
             )}
-            {!isAuth() && <Nav.Link href="/">Login</Nav.Link>}
-            {!isAuth() && <Nav.Link href="/register">Signup</Nav.Link>}
+            {user && (
+              <>
+                <Nav.Link as={Link} to={`/user`}>
+                  {user.Username}
+                </Nav.Link>
+                <Nav.Link onClick={onLoggedOut}>Logout</Nav.Link>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
