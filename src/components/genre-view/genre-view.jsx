@@ -4,21 +4,21 @@ import { MovieCard } from "../movie-card/movie-card";
 
 export class GenreView extends React.Component {
   render() {
-    const { movie, onBackClick, genreMovies } = this.props;
+    const { genre, onBackClick, genreMovies } = this.props;
 
     return (
       <div>
         <Container className="genre-view">
           <Row>
             <Col className="label">Genre: </Col>
-            <Col className="value">{movie.genre.Name}</Col>
+            <Col className="value">{genre.Genre.Name}</Col>
           </Row>
           <Row>
             <Col className="label">Description: </Col>
-            <Col className="value">{movie.genre.Description}</Col>
+            <Col className="value">{genre.Genre.Description}</Col>
           </Row>
           <Row>
-            <Col className="label">Other {movie.genre.Name} films: </Col>
+            <Col className="label">Other {genre.Genre.Name} movies: </Col>
             <Col className="value">
               {genreMovies.map((movie) => (
                 <MovieCard key={movie.id} movie={movie}>

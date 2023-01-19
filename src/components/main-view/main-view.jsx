@@ -146,10 +146,10 @@ export const MainView = () => {
                 <Col md={8}>
                   <GenreView
                     genreMovies={movies.filter(
-                      (movie) => movie.genre.Name === match.params.name
+                      (movie) => movie.Genre.Name === match.params.name
                     )}
                     genre={movies.find(
-                      (m) => m.genre.Name === match.params.name
+                      (m) => m.Genre.Name === match.params.name
                     )}
                     onBackClick={() => history.goBack()}
                   />
@@ -171,10 +171,10 @@ export const MainView = () => {
                 <Col md={8}>
                   <DirectorView
                     director={movies.find(
-                      (m) => m.director.Name === match.params.name
+                      (m) => m.Director.Name === match.params.name
                     )}
                     directorMovies={movies.filter(
-                      (movie) => movie.director.Name === match.params.name
+                      (movie) => movie.Director.Name === match.params.name
                     )}
                     onBackClick={() => history.goBack()}
                   />
