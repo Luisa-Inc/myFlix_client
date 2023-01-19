@@ -11,8 +11,8 @@ export const MovieCard = ({ movie }) => {
     <Container className="content">
       <Col>
         <Card className="h-100; moviecardview" bg="dark" text="light">
-          <Card.Img variant="top" crossOrigin="anonymous" src={movie.image} />
-          <Card.Body>
+          <Card.Img className="image" variant="top" crossOrigin="anonymous" src={movie.image} />
+          <Card.Body className="body">
             <Card.Title className="title"> {movie.title} </Card.Title>
             <Card.Text className="description">
               {" "}
