@@ -11,7 +11,7 @@ export class DirectorView extends React.Component {
         <Container className="director-view">
           <Row>
             <Col className="label">Director: </Col>
-            <Col className="value">{mdirector.Director.Name}</Col>
+            <Col className="value">{director.Director.Name}</Col>
           </Row>
           <Row>
             <Col className="label">Bio: </Col>
