@@ -13,7 +13,15 @@
 }
 
 .moviecardview {
-  height: 640px;
+  height: 100%;
   text-align: center;
 }
+
+@media (min-width: 360px) {
+
+   .moviecardview {
+     display: inline-block;
+  }
+}
+
 
