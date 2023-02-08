@@ -34,6 +34,12 @@ export const NavigationBar = ({ user, onLoggedOut }) => {
               </>
             )}
           </Nav>
+
+          <Form.Control
+            onChange={(e) => dispatch(filter(e.target.value))}
+            value={visibilityFilter}
+            placeholder="Search"
+          />
         </Navbar.Collapse>
       </Container>
     </Navbar>
