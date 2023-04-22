@@ -7,35 +7,37 @@ export class DirectorView extends React.Component {
     const { director, onBackClick, directorMovies } = this.props;
 
     return (
-      <div>
-        <Container className="director-view">
-          <Row>
-            <Col className="label">Director: </Col>
-            <Col className="value">{director.Director.Name}</Col>
-          </Row>
-          <Row>
-            <Col className="label">Bio: </Col>
-            <Col className="value">{director.Director.Bio}</Col>
-          </Row>
-          <Col className="label">{director.Director.Name} movies: </Col>
-          <Col className="value">
-            {directorMovies.map((movie) => (
-              <MovieCard key={movie.id} movie={movie}>
+      <Container className="director-view">
+        <Row>
+          <Col>
+            <h1>{director.Name}</h1>
+            <p>Birth: {director.Birth}</p>
+            {director.Death > 0 && <p>Death: {director.Death}</p>}
+          </Col>
+        </Row>
+        <Row>
+          <Col>{director.Bio}</Col>
+        </Row>
+
+        <Row>
+          {directorMovies?.map((movie) => (
+            <Col lg={4} md={6}>
+              <MovieCard key={movie._id} movie={movie}>
                 {movie.Title}
               </MovieCard>
-            ))}
-          </Col>
-
-          <Button
-            className="mt-4"
-            onClick={() => {
-              onBackClick();
-            }}
-          >
-            Back
-          </Button>
-        </Container>
-      </div>
+            </Col>
+          ))}
+        </Row>
+        <Button
+          className="mt-3 backBtn"
+          onClick={() => {
+            onBackClick(null);
+          }}
+          variant="secondary"
+        >
+          Go Back
+        </Button>
+      </Container>
     );
   }
 }
