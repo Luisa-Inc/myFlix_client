@@ -48,5 +48,5 @@ Allows users to update their user info (username, password, email, date of birth
 ## Set up
 
 - Clone this repository
-- Navigate to the movie_api-client folder and run npm install
-- Run parcel src/index.html
+- Navigate to the myFlix-client folder and run `npm install`
+- Run `parcel src/index.html`
