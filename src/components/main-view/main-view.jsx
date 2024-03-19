@@ -206,12 +206,12 @@ export const MainView = () => {
                         <option value="" selected>
                           Search by genre
                         </option>
+                        <option value="Animated">Animated</option>
                         <option value="Comedy">Comedy</option>
-                        <option value="Science Fiction">Science Fiction</option>
                         <option value="Concert Film">Concert Film</option>
                         <option value="Romantic Drama">Romantic Drama</option>
+                        <option value="Science Fiction">Science Fiction</option>
                         <option value="Thriller">Thriller</option>
-                        <option value="Animated">Animated</option>
                       </Form.Select>
                     </Form>
                     {movies
