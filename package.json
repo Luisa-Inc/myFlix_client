@@ -1,38 +1,23 @@
 {
   "name": "myflix_client",
   "version": "1.0.0",
-  "default": "src/index.html",
   "description": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "parcel src/index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Luisa-Inc/myFlix_client.git"
-  },
-  "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Luisa-Inc/myFlix_client/issues"
-  },
-  "homepage": "https://github.com/Luisa-Inc/myFlix_client#readme",
-  "dependencies": {
-    "axios": "^1.2.3",
-    "bootstrap": "^5.2.3",
-    "prop-types": "^15.8.1",
-    "react": "^17.0.2",
-    "react-bootstrap": "^2.5.0",
-    "react-dom": "^17.0.2",
-    "react-redux": "^8.0.5",
-    "react-router": "^6.3.0",
-    "react-router-dom": "^6.3.0",
-    "redux": "^4.2.0",
-    "redux-devtools-extension": "^2.13.9"
-  },
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.12.0",
-    "parcel": "^2.12.0"
+    "@parcel/transformer-sass": "^2.10.2",
+    "bootstrap": "^5.3.2",
+    "moment": "^2.29.4",
+    "parcel": "^2.10.2",
+    "process": "^0.11.10",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.9.1",
+    "react-bootstrap-icons": "^1.10.3",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.1"
   }
 }
