@@ -1,27 +1,25 @@
-import React from "react";
 import { useState, useEffect } from "react";
 import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
-import { LoginView } from "../login-view/login-view";
-import { SignupView } from "../signup-view/signup-view";
-import { ProfileView } from "../profile-view/profile-view";
-import { NavigationBar } from "../navigation-bar/navigation-bar";
-import { DirectorView } from "../director-view/director-view";
-import { GenreView } from "../genre-view/genre-view";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
+import { LoginView } from "../login-view/login-view.jsx";
+import { SignupView } from "../signup-view/signup-view.jsx";
+import { NavigationBar } from "../navigation-bar/navigation-bar.jsx";
+import { ProfileView } from "../profile-view/profile-view.jsx";
 import "./main-view.scss";
+import { Row } from "react-bootstrap";
+import { Col, Form, Button } from "react-bootstrap";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 export const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const storedToken = localStorage.getItem("token");
-
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
   const [movies, setMovies] = useState([]);
+  const [search, setSearch] = useState("");
+  const [selectedGenre, setSelectedGenre] = useState("");
 
+  // Connect App to API with Hook
   useEffect(() => {
     if (!token) {
       return;
@@ -33,20 +31,84 @@ export const MainView = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        const moviesFromApi = data.map((doc) => {
+        const moviesFromApi = data.map((movie) => {
           return {
-            id: doc._id,
-            title: doc.Title,
-            image: doc.ImagePath,
-            director: doc.Director,
-            genre: doc.Genre,
-            description: doc.Description,
+            _id: movie._id,
+            Title: movie.Title,
+            ImagePath: movie.ImagePath,
+            Description: movie.Description,
+            Year: movie.Year,
+            Genre: {
+              Name: movie.Genre.Name,
+            },
+            Director: {
+              Name: movie.Director.Name,
+            },
           };
         });
-
         setMovies(moviesFromApi);
       });
   }, [token]);
+
+  // Add Favorite Movie
+  const addFav = (id) => {
+    fetch(
+      `https://mighty-harbor-05233.herokuapp.com/users/${user.Username}/movies/${id}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          alert("Failed to add");
+        }
+      })
+      .then((user) => {
+        if (user) {
+          localStorage.setItem("user", JSON.stringify(user));
+          setUser(user);
+          //setIsFavorite(true);
+        }
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
+  };
+
+  // Remove Favorite Movie
+  const removeFav = (id) => {
+    fetch(
+      `https://mighty-harbor-05233.herokuapp.com/users/${user.Username}/movies/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          alert("Failed to remove");
+        }
+      })
+      .then((user) => {
+        if (user) {
+          localStorage.setItem("user", JSON.stringify(user));
+          setUser(user);
+          //setIsFavorite(false);
+        }
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
+  };
 
   return (
     <BrowserRouter>
@@ -54,13 +116,13 @@ export const MainView = () => {
         user={user}
         onLoggedOut={() => {
           setUser(null);
-          setToken(null);
-          localStorage.clear();
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
         }}
       />
-
-      <Row className="justify-content-md-center">
+      <Row className="justify-content-center my-5">
         <Routes>
+          {/* Return SignupView if not logged in, otherwise mainpage */}
           <Route
             path="/signup"
             element={
@@ -68,13 +130,14 @@ export const MainView = () => {
                 {user ? (
                   <Navigate to="/" />
                 ) : (
-                  <Col md={5} xs={12}>
+                  <Col md={5}>
                     <SignupView />
                   </Col>
                 )}
               </>
             }
           />
+          {/* Return LoginView if not logged in, otherwise mainpage */}
           <Route
             path="/login"
             element={
@@ -82,7 +145,7 @@ export const MainView = () => {
                 {user ? (
                   <Navigate to="/" />
                 ) : (
-                  <Col md={5} xs={12}>
+                  <Col md={5}>
                     <LoginView
                       onLoggedIn={(user, token) => {
                         setUser(user);
@@ -94,23 +157,28 @@ export const MainView = () => {
               </>
             }
           />
+          {/* Return MovieView if logged in, otherwise LoginView */}
           <Route
             path="/movies/:movieId"
             element={
               <>
                 {!user ? (
                   <Navigate to="/login" replace />
-                ) : movies.lenght === 0 ? (
-                  <Col> The list is empty!</Col>
+                ) : movies.length === 0 ? (
+                  <Col>There is no movie</Col>
                 ) : (
-                  <Col md={8} xs={12}>
-                    <MovieView movies={movies} />
+                  <Col md={12}>
+                    <MovieView
+                      movies={movies}
+                      removeFav={removeFav}
+                      addFav={addFav}
+                    />
                   </Col>
                 )}
               </>
             }
           />
-
+          {/* Return MovieCards if logged in, otherwise LoginView */}
           <Route
             path="/"
             element={
@@ -118,79 +186,83 @@ export const MainView = () => {
                 {!user ? (
                   <Navigate to="/login" replace />
                 ) : movies.length === 0 ? (
-                  <Col>The list is empty!</Col>
+                  <Col>The list is empty</Col>
                 ) : (
                   <>
-                    {movies.map((movie) => (
-                      <Col className="mb-4" key={movie.id} md={3}>
-                        <MovieCard movie={movie} />
-                      </Col>
-                    ))}
+                    <Form className="form-inline mt-5 d-flex justify-content-center">
+                      <Form.Control
+                        className="ms-5 mx-md-0"
+                        type="search"
+                        id="searchForm"
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder="Search for ..."
+                        aria-label="Search"
+                      />
+                      <Form.Select
+                        className="ms-1 ms-md-3 w-25"
+                        aria-label="Default select genre"
+                        onChange={(e) => setSelectedGenre(e.target.value)}
+                      >
+                        <option value="" selected>
+                          Search by genre
+                        </option>
+                        <option value="Comedy Horror">Comedy Horror</option>
+                        <option value="Horror">Horror</option>
+                        <option value="Musical">Musical</option>
+                        <option value="Fantasy">Fantasy</option>
+                        <option value="Thriller">Thriller</option>
+                      </Form.Select>
+                    </Form>
+                    {movies
+                      .filter((movie) => {
+                        return selectedGenre === ""
+                          ? movie
+                          : movie.Genre.Name === selectedGenre;
+                      })
+                      .filter((movie) => {
+                        return search === ""
+                          ? movie
+                          : movie.Title.toLowerCase().includes(
+                              search.toLowerCase()
+                            );
+                      })
+                      .map((movie, movieId) => (
+                        <Col
+                          md={6}
+                          lg={4}
+                          xl={3}
+                          className="mb-5 col-8"
+                          key={movieId}
+                        >
+                          <MovieCard
+                            movie={movie}
+                            removeFav={removeFav}
+                            addFav={addFav}
+                            isFavorite={user.FavoriteMovies.includes(movie._id)}
+                          />
+                        </Col>
+                      ))}
                   </>
                 )}
               </>
             }
           />
-
+          {/* Return ProfileView if logged in, otherwise LoginView */}
           <Route
-            path="/genres/:name"
-            render={({ match, history }) => {
-              if (!user)
-                return (
-                  <Col>
-                    <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
-                  </Col>
-                );
-              if (movies.length === 0) return <div className="main-view" />;
-              return (
-                <Col md={8}>
-                  <GenreView
-                    genreMovies={movies.filter(
-                      (movie) => movie.Genre.Name === match.params.name
-                    )}
-                    genre={movies.find(
-                      (m) => m.Genre.Name === match.params.name
-                    )}
-                    onBackClick={() => history.goBack()}
-                  />
-                </Col>
-              );
-            }}
-          />
-          <Route
-            path="/directors/:name"
-            render={({ match, history }) => {
-              if (!user)
-                return (
-                  <Col>
-                    <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
-                  </Col>
-                );
-              if (movies.length === 0) return <div className="main-view" />;
-              return (
-                <Col md={8}>
-                  <DirectorView
-                    director={movies.find(
-                      (m) => m.Director.Name === match.params.name
-                    )}
-                    directorMovies={movies.filter(
-                      (movie) => movie.Director.Name === match.params.name
-                    )}
-                    onBackClick={() => history.goBack()}
-                  />
-                </Col>
-              );
-            }}
-          />
-          <Route
-            path="/user"
+            path="/profile"
             element={
               <>
                 {!user ? (
                   <Navigate to="/login" replace />
                 ) : (
-                  <Col md={8}>
-                    <ProfileView movies={movies} />
+                  <Col>
+                    <ProfileView
+                      user={user}
+                      movies={movies}
+                      removeFav={removeFav}
+                      addFav={addFav}
+                      setUser={setUser}
+                    />
                   </Col>
                 )}
               </>

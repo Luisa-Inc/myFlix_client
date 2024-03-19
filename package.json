@@ -5,7 +5,7 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "parcel src/index.html && parcel watch src/index.html"
+    "start": "parcel src/index.js"
   },
   "repository": {
     "type": "git",
@@ -22,13 +22,12 @@
     "axios": "^1.2.3",
     "bootstrap": "^5.2.3",
     "prop-types": "^15.8.1",
-    "react": "^18.2.0",
+    "react": "^17.0.2",
     "react-bootstrap": "^2.5.0",
-    "react-dom": "^18.0.0",
+    "react-dom": "^17.0.2",
     "react-redux": "^8.0.5",
     "react-router": "^6.3.0",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "^5.0.1",
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9"
   },

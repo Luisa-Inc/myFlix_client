@@ -1,27 +1,20 @@
-.title {
-  text-align: center;
-  align-items: center;
+.card-shadow {
+    box-shadow: 5px 5px 15px 5px rgba(255, 165, 0, 0.4);
 }
 
-.description.card-text {
-  font-weight: lighter;
-  text-align: center;
+.card-img {
+    display: block;
+    width: 150px; 
+    height: 400px; 
+    object-fit: fill;
 }
 
-.content {
-  margin-top: 100px;
+.fav-button {
+    cursor: pointer;
+    transition: 0.2s linear;
+    position: absolute;
 }
 
-.moviecardview {
-  height: 100%;
-  text-align: center;
+.fav-button:hover {
+    transform: scale(1.2);
 }
-
-@media (min-width: 500px) {
-
-   .moviecardview {
-     display: inline-block;
-  }
-}
-
-

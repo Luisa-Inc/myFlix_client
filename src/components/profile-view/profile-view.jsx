@@ -1,149 +1,172 @@
-import React, { useState } from "react";
-import { Button, Form, Row, Col, Container } from "react-bootstrap";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Col, Row, Container } from "react-bootstrap";
+import { Button, Card, Form } from "react-bootstrap";
 import { MovieCard } from "../movie-card/movie-card";
+import { PersonSquare } from "react-bootstrap-icons";
+import moment from "moment";
 
-import "./profile-view.scss";
-
-export const ProfileView = ({ movies }) => {
-  const storedToken = localStorage.getItem("token");
-  const [token, setToken] = useState(storedToken ? storedToken : null);
-
-  const storedUser = JSON.parse(localStorage.getItem("user"));
-  const [user, setUser] = useState(storedUser ? storedUser : null);
-
+export const ProfileView = ({ user, movies, setUser, removeFav, addFav }) => {
   const [username, setUsername] = useState(user.Username);
-  const [password, setPassword] = useState();
   const [email, setEmail] = useState(user.Email);
+  const [birthday, setBirthday] = useState(user.Birthday);
 
-  let favoriteMovies =
-    movies &&
-    movies.filter(
-      (m) => user.FavoriteMovies && user.FavoriteMovies.indexOf(m.id) >= 0
-    );
+  // Navigate
+  const navigate = useNavigate();
 
-  const updateUser = (username) => {
-    fetch("https://mighty-harbor-05233.herokuapp.com/users/" + username, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((response) => response.json())
-      .then((user) => {
-        if (user) {
-          setUser(user);
-          setToken(token);
-          localStorage.setItem("user", JSON.stringify(user));
-        }
-      });
-  };
+  // Return list of favorite Movies
+  const favoriteMovieList = movies.filter((m) =>
+    user.FavoriteMovies.includes(m._id)
+  );
 
-  const handleSubmit = (event) => {
+  // Token
+  const token = localStorage.getItem("token");
+
+  // Update user info
+  const handleUpdate = (event) => {
+    // this prevents the default behavior of the form which is to reload the entire page
     event.preventDefault();
+
+    const user = JSON.parse(localStorage.getItem("user"));
 
     const data = {
       Username: username,
-      Password: password,
       Email: email,
+      Birthday: birthday,
     };
 
-    fetch("https://mighty-harbor-05233.herokuapp.com/users/" + user.Username, {
+    fetch(`https://mighty-harbor-05233.herokuapp.com/users/${user.Username}`, {
       method: "PUT",
       body: JSON.stringify(data),
       headers: {
-        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-    }).then((response) => {
-      if (response.ok) {
-        alert("Changes saved");
-        updateUser(user.Username).then(() => window.location.reload());
-      } else {
-        alert("Something went wrong");
-      }
-    });
+    })
+      .then(async (response) => {
+        console.log(response);
+        if (response.ok) {
+          const updatedUser = await response.json();
+          localStorage.setItem("user", JSON.stringify(updatedUser));
+          setUser(updatedUser);
+          alert("Update was successful");
+        } else {
+          alert("Update failed");
+        }
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
   };
 
-  const handleDeregister = () => {
-    fetch("https://mighty-harbor-05233.herokuapp.com/users/" + user.Username, {
+  // Delete User
+  const handleDelete = () => {
+    fetch(`https://mighty-harbor-05233.herokuapp.com/users/${user.Username}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
       },
     }).then((response) => {
       if (response.ok) {
-        alert("Account successfully deleted");
-        window.location.reload();
+        setUser(null);
+        alert("User has been deleted");
+        localStorage.clear();
+        navigate("/"); // go back to home page
       } else {
-        alert("Something went wrong");
+        alert("Something went wrong.");
       }
     });
   };
 
   return (
-    <Container className="content">
+    <Container className="my-5">
       <Row>
-        <Col>
-          <div className="profile-info">
-            <div className="user-info">
-              <span className="label">Username: </span>
-              <span className="value">{user.Username}</span>
-            </div>
-            <div className="user-info">
-              <span className="label">Email: </span>
-              <span className="value">{user.Email}</span>
-            </div>
-            <div className="user-info">
-              <span className="label">Birthday: </span>
-              <span className="value">{user.Birthday}</span>
-            </div>
-          </div>
+        <Col md={4} className="text-center text-md-start ms-3">
+          <Card>
+            <Card.Body>
+              <Card.Title>My Profile</Card.Title>
+              <PersonSquare
+                variant="top"
+                color="orange"
+                className="my-4"
+                size={180}
+              />
+              <Card.Text>Username:{user.Username}</Card.Text>
+              <Card.Text>Email: {user.Email}</Card.Text>
+              <Card.Text>
+                Birthday: {moment(user.Birthday).utc().format("YYYY-MM-DD")}
+              </Card.Text>
+            </Card.Body>
+          </Card>
         </Col>
-        <Col>
-          <Form onSubmit={handleSubmit}>
-            <h2>Update your personal information</h2>
-            <Form.Group>
-              <Form.Label>Username: </Form.Label>
+        <Col md={7} className="mt-5">
+          <Form onSubmit={handleUpdate}>
+            <Form.Group controlId="formUsername">
+              <Form.Label>Username:</Form.Label>
               <Form.Control
-                type="username"
+                className="mb-3"
+                type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                minLength="5"
               />
             </Form.Group>
-            <Form.Group>
-              <Form.Label>Password: </Form.Label>
+            <Form.Group controlId="formEmail">
+              <Form.Label>Email:</Form.Label>
               <Form.Control
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Email: </Form.Label>
-              <Form.Control
-                type="text"
+                className="mb-3"
+                type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </Form.Group>
-            <Button type="submit" className="button-primary">
-              Save Changes
+            <Form.Group controlId="formBirthday">
+              <Form.Label>Birthday:</Form.Label>
+              <Form.Control
+                className="mb-2"
+                type="date"
+                value={birthday}
+                onChange={(e) => setBirthday(e.target.value)}
+              />
+            </Form.Group>
+            <Button type="submit" onClick={handleUpdate} className="mt-3 me-2">
+              Update
+            </Button>
+            <Button
+              onClick={handleDelete}
+              className="mt-3 bg-danger border-danger text-white"
+            >
+              Delete User
             </Button>
           </Form>
-          <Button
-            onClick={() => handleDeregister(user._id)}
-            className="button-delete"
-            type="submit"
-            variant="danger"
-          >
-            Delete Account
-          </Button>
         </Col>
-        <Row>
-          {favoriteMovies.length > 0 &&
-            favoriteMovies.map((movie) => (
-              <Col className="mb-5" key={movie.id} sm={5} md={3}>
-                <MovieCard movie={movie} />
+      </Row>
+      <Row>
+        <h2 className="mt-5 text-center text-md-start">Favorite Movies</h2>
+        <Row className="justify-content-center">
+          {favoriteMovieList?.length !== 0 ? (
+            favoriteMovieList?.map((movie) => (
+              <Col
+                sm={7}
+                md={5}
+                lg={3}
+                xl={2}
+                className="mx-2 mt-2 mb-5 col-6 similar-movies-img"
+                key={movie._id}
+              >
+                <MovieCard
+                  movie={movie}
+                  removeFav={removeFav}
+                  addFav={addFav}
+                  isFavorite={user.FavoriteMovies.includes(movie._id)}
+                />
               </Col>
-            ))}
+            ))
+          ) : (
+            <Col>
+              <p>There are no favorites Movies</p>
+            </Col>
+          )}
         </Row>
       </Row>
     </Container>

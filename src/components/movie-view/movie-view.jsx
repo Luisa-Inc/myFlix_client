@@ -1,82 +1,104 @@
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
-import { Button, Card, Row, Container } from "react-bootstrap";
-import "./movie-view.scss";
+import { Button } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
+import { MovieCard } from "../movie-card/movie-card";
 
-export const MovieView = ({ movies }) => {
+export const MovieView = ({ movies, removeFav, addFav }) => {
   const { movieId } = useParams();
-  const movie = movies.find((m) => m.id === movieId);
-  const storedUser = JSON.parse(localStorage.getItem("user"));
-  const token = localStorage.getItem("token");
+  const movie = movies.find((movie) => movie._id === movieId);
 
-  const addFavorite = (movieId) => {
-    if (!token) return;
+  // Similar Movies
+  const selectedMovie = movies.find((movie) => movie._id === movieId);
+  const similarMovies = movies.filter((movie) => {
+    return (
+      movie._id !== movieId && movie.Genre.Name === selectedMovie.Genre.Name
+    );
+  });
 
-    const url = `https://mighty-harbor-05233.herokuapp.com/users/${storedUser.Username}/movies/${movieId}`;
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    fetch(url, requestOptions)
-      .then((response) => {
-        console.log(response);
-        alert("Added to favorites!");
-        return response.json();
-      })
-      .catch((err) => {
-        alert("Something went wrong");
-      });
-  };
+  // User
+  const user = JSON.parse(localStorage.getItem("user"));
+  //const FavoriteMovies = {user.FavoriteMovies}; //parsing error? how to get user in?
+
+  // Debug
+  console.log(user);
 
   return (
-    <Container className="cardset; content">
-      <Row>
-        <Card bg="dark" text="light">
-          <Card.Header>
-            <div className="title text-center">
-              <span> {movie.title} </span>
-            </div>
-            <Button
-              className="fav-btn"
-              size="sm"
-              variant="secondary"
-              onClick={() => addFavorite(movie.id)}
-            >
-              Add to Favorites
-            </Button>
-          </Card.Header>
-          <Card.Body>
-            <div>
-              <div>
-                <Card.Img
-                  className="cardimage"
-                  crossOrigin="anonymous"
-                  src={movie.image}
-                />
-              </div>
-              <div>
-                <span className="labeltitle">Description: </span>
-                <span className="description">{movie.description}</span>
-              </div>
-              <div>
-                <span className="labeltitle">Genre: </span>
-                <span className="genre">{movie.genre.Name}</span>
-              </div>
-              <div>
-                <span className="labeltitle">Director: </span>
-                <span className="director">{movie.director.Name}</span>
-              </div>
-            </div>
-          </Card.Body>
-          <Card.Footer>
-            <Link to="/">
-              <Button className="btn-login"> Back </Button>
-            </Link>
-          </Card.Footer>
-        </Card>
+    <>
+      <Row className="my-5 justify-content-md-center">
+        <Col md={7} className="col-12">
+          <img
+            src={movie.ImagePath}
+            alt="movie cover"
+            className="mx-auto w-100"
+          />
+        </Col>
+        <Col md={5} className="col-12">
+          <div className="my-1">
+            <span className="h1">{movie.Title}</span>
+          </div>
+          <div className="my-1">
+            <span className="h6">Description: </span>
+            <span>{movie.Description}</span>
+          </div>
+          <div className="my-1">
+            <span className="h6">Director: </span>
+            <span>{movie.Director.Name}</span>
+          </div>
+          <div className="my-1">
+            <span className="h6">Genre: </span>
+            <span>{movie.Genre.Name}</span>
+          </div>
+          <div className="my-1">
+            <span className="h6">Year: </span>
+            <span>{movie.Year}</span>
+          </div>
+          <div>
+            {user.FavoriteMovies.includes(movie._id) ? (
+              <Button
+                className="my-2 me-2"
+                on
+                onClick={() => removeFav(movie._id)}
+              >
+                Remove from Favorite
+              </Button>
+            ) : (
+              <Button className="my-2 me-2" onClick={() => addFav(movie._id)}>
+                Add to Favorite
+              </Button>
+            )}
+          </div>
+          <Link to={`/`}>
+            <Button className="my-2">Back</Button>
+          </Link>
+        </Col>
       </Row>
-    </Container>
+      <h2>Similar Movies</h2>
+      <Row className="justify-content-center">
+        {similarMovies.length !== 0 ? (
+          similarMovies.slice(0, 5).map((movie) => (
+            <Col
+              sm={5}
+              md={4}
+              lg={3}
+              xl={2}
+              className="mx-2 my-3 col-6 similar-movies-img"
+              key={movie._id}
+            >
+              <MovieCard
+                movie={movie}
+                removeFav={removeFav}
+                addFav={addFav}
+                isFavorite={user.FavoriteMovies.includes(movie._id)}
+              />
+            </Col>
+          ))
+        ) : (
+          <Col>
+            <p>There are no similar Movies</p>
+          </Col>
+        )}
+      </Row>
+    </>
   );
 };
