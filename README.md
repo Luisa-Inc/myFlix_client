@@ -22,7 +22,7 @@ The client-side for an app called myMovie based on its existing server-side code
 ## Corresponding API
 
 - Movie API: https://github.com/Luisa-Inc/movie_api 
-- Hosted version: https://mighty-harbor-05233.herokuapp.com/  
+- Hosted version: https://myluisaflix.netlify.app/
 
 
 ## Views
