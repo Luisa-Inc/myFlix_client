@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Col, Row, Container } from "react-bootstrap";
 import { Button, Card, Form } from "react-bootstrap";
+import { MovieCard } from "../movie-card/movie-card";
 import { PersonSquare } from "react-bootstrap-icons";
 import moment from "moment";
 
@@ -25,7 +26,10 @@ export const ProfileView = ({ user, movies, setUser, removeFav, addFav }) => {
 
   // Update user info
   const handleUpdate = (event) => {
+    // this prevents the default behavior of the form which is to reload the entire page
     event.preventDefault();
+
+    const user = JSON.parse(localStorage.getItem("user"));
 
     const data = {
       Username: username,
@@ -44,6 +48,7 @@ export const ProfileView = ({ user, movies, setUser, removeFav, addFav }) => {
       },
     })
       .then(async (response) => {
+        console.log(response);
         if (response.ok) {
           const updatedUser = await response.json();
           localStorage.setItem("user", JSON.stringify(updatedUser));
@@ -127,8 +132,9 @@ export const ProfileView = ({ user, movies, setUser, removeFav, addFav }) => {
                 value={birthday}
                 onChange={(e) => setBirthday(e.target.value)}
               />
-            </Form.Group>
-            {/* New fields for password update */}
+
+              </Form.Group>
+            
             <Form.Group controlId="formCurrentPassword">
               <Form.Label>Current Password:</Form.Label>
               <Form.Control
