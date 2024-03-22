@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export const NavigationBar = ({ user, onLoggedOut }) => {
   return (
     <Navbar
-      className="navbar navbar-custom"
+      text="body-bg"
       bg="primary"
       expand="lg"
       fixed="top"
