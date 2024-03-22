@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Col, Row, Container } from "react-bootstrap";
 import { Button, Card, Form } from "react-bootstrap";
-import { MovieCard } from "../movie-card/movie-card";
 import { PersonSquare } from "react-bootstrap-icons";
 import moment from "moment";
 
@@ -10,6 +9,8 @@ export const ProfileView = ({ user, movies, setUser, removeFav, addFav }) => {
   const [username, setUsername] = useState(user.Username);
   const [email, setEmail] = useState(user.Email);
   const [birthday, setBirthday] = useState(user.Birthday);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
 
   // Navigate
   const navigate = useNavigate();
@@ -24,15 +25,14 @@ export const ProfileView = ({ user, movies, setUser, removeFav, addFav }) => {
 
   // Update user info
   const handleUpdate = (event) => {
-    // this prevents the default behavior of the form which is to reload the entire page
     event.preventDefault();
-
-    const user = JSON.parse(localStorage.getItem("user"));
 
     const data = {
       Username: username,
       Email: email,
       Birthday: birthday,
+      CurrentPassword: currentPassword, // Add current password
+      NewPassword: newPassword, // Add new password
     };
 
     fetch(`https://mighty-harbor-05233.herokuapp.com/users/${user.Username}`, {
@@ -44,7 +44,6 @@ export const ProfileView = ({ user, movies, setUser, removeFav, addFav }) => {
       },
     })
       .then(async (response) => {
-        console.log(response);
         if (response.ok) {
           const updatedUser = await response.json();
           localStorage.setItem("user", JSON.stringify(updatedUser));
@@ -127,6 +126,27 @@ export const ProfileView = ({ user, movies, setUser, removeFav, addFav }) => {
                 type="date"
                 value={birthday}
                 onChange={(e) => setBirthday(e.target.value)}
+              />
+            </Form.Group>
+            {/* New fields for password update */}
+            <Form.Group controlId="formCurrentPassword">
+              <Form.Label>Current Password:</Form.Label>
+              <Form.Control
+                className="mb-3"
+                type="password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Form.Group controlId="formNewPassword">
+              <Form.Label>New Password:</Form.Label>
+              <Form.Control
+                className="mb-3"
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
               />
             </Form.Group>
             <Button type="submit" onClick={handleUpdate} className="mt-3 me-2">
