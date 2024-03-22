@@ -10,8 +10,6 @@ export const ProfileView = ({ user, movies, setUser, removeFav, addFav }) => {
   const [username, setUsername] = useState(user.Username);
   const [email, setEmail] = useState(user.Email);
   const [birthday, setBirthday] = useState(user.Birthday);
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
 
   // Navigate
   const navigate = useNavigate();
@@ -35,8 +33,6 @@ export const ProfileView = ({ user, movies, setUser, removeFav, addFav }) => {
       Username: username,
       Email: email,
       Birthday: birthday,
-      CurrentPassword: currentPassword, // Add current password
-      NewPassword: newPassword, // Add new password
     };
 
     fetch(`https://mighty-harbor-05233.herokuapp.com/users/${user.Username}`, {
@@ -131,28 +127,6 @@ export const ProfileView = ({ user, movies, setUser, removeFav, addFav }) => {
                 type="date"
                 value={birthday}
                 onChange={(e) => setBirthday(e.target.value)}
-              />
-
-              </Form.Group>
-            
-            <Form.Group controlId="formCurrentPassword">
-              <Form.Label>Current Password:</Form.Label>
-              <Form.Control
-                className="mb-3"
-                type="password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                required
-              />
-            </Form.Group>
-            <Form.Group controlId="formNewPassword">
-              <Form.Label>New Password:</Form.Label>
-              <Form.Control
-                className="mb-3"
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                required
               />
             </Form.Group>
             <Button type="submit" onClick={handleUpdate} className="mt-3 me-2">
