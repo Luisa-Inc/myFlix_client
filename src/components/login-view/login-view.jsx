@@ -19,6 +19,7 @@ export const LoginView = ({ onLoggedIn }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2FiMDU0YmZkZDUwYmFjOTI4YzA3NTEiLCJVc2VybmFtZSI6IkxhZHlTYW5kcmEiLCJQYXNzd29yZCI6ImxhZHlzYW5kcmFwYXNzd29yZCIsIkVtYWlsIjoibGFkeXNhbmRyYUBnbWFpbC5jb20iLCJCaXJ0aGRheSI6IjE5ODgtMDgtMDdUMjI6MDA6MDAuMDAwWiIsIkZhdm9yaXRlTW92aWVzIjpbXSwiX192IjowLCJpYXQiOjE2NzIxNTI4NTQsImV4cCI6MTY3Mjc1NzY1NCwic3ViIjoiTGFkeVNhbmRyYSJ9.ZJGX5_B9BjXTdRrRJAgtdlFbe8E6VT5e_U_jFs2kFig}`,
       },
       body: JSON.stringify(data),
     })
